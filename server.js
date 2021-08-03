@@ -15,6 +15,20 @@ app.get('/time', (req, res) => {
     res.send("Time is " + t)
 })
 
+app.get('/files/:name', (req, res) => {
+
+    //res.send("U sent " + req.params.name)
+    try {
+
+        var filename = req.params.name
+        res.sendFile(__dirname + "\\" + filename)
+    } catch (ex) {
+        res.status(404)
+        res.send("ERROR NOT FOUND ")
+    }
+})
+
+
 app.listen(port, () => {
     console.log("Example app listening at http://localhost:${port}")
 })
