@@ -9,7 +9,9 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+    console.log("Connection Opened ");
     socket.on('chat message', msg => {
+        console.log("Message Received");
         io.emit('chat message', msg);
     });
 });
