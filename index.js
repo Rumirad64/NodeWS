@@ -20,12 +20,19 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     var add = socket.handshake.address.substring(7);
     console.log("Connection Opened -> " + add);
+
     io.emit('chat message', "Client connected from -> " + add);
+
     socket.on('chat message', msg => {
         console.log("Message Received");
         var address = socket.handshake.address.substring(7);
         io.emit('chat message', address + " -> " + msg);
+    });
 
+    socket.on('request usage', msg => {
+        console.log("Requesting Usage");
+        var address = socket.handshake.address.substring(7);
+        io.emit('response usage', "10");
     });
 });
 
@@ -50,9 +57,10 @@ setInterval(function() {
     cpu.usage()
         .then(info => {
             //console.log(info)
+            io.emit('response usage', info.toString());
         });
 
-}, 2000);
+}, 500);
 
 http.listen(port, () => {
     console.log(`Socket.IO server running at http://localhost:${port}/`);
