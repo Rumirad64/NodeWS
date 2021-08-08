@@ -20,18 +20,18 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     var add = socket.handshake.address.substring(7);
     console.log("Connection Opened -> " + add);
-    io.emit('chat message', "Client connected from -> " + add );
+    io.emit('chat message', "Client connected from -> " + add);
     socket.on('chat message', msg => {
         console.log("Message Received");
-	var address = socket.handshake.address.substring(7);
-        io.emit('chat message',address +" -> " + msg );
+        var address = socket.handshake.address.substring(7);
+        io.emit('chat message', address + " -> " + msg);
 
     });
 });
 
-app.get('/getmsgs', (req, res) => {
+app.get('/data', (req, res) => {
 
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/data.html');
 });
 
 app.get('/spec', (req, res) => {
