@@ -18,10 +18,13 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log("Connection Opened ");
+    var add = socket.handshake.address.substring(7);
+    console.log("Connection Opened -> " + add);
+    io.emit('chat message', "Client connected from -> " + add );
     socket.on('chat message', msg => {
         console.log("Message Received");
-        io.emit('chat message', msg);
+	var address = socket.handshake.address.substring(7);
+        io.emit('chat message',address +" -> " + msg );
 
     });
 });
@@ -46,7 +49,7 @@ setInterval(function() {
 
     cpu.usage()
         .then(info => {
-            console.log(info)
+            //console.log(info)
         });
 
 }, 2000);
