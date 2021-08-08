@@ -1,8 +1,8 @@
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-
-var osu = require('node-os-utils')
+const os = require('os');
+var osu = require('node-os-utils');
 
 
 const { info } = require('console');
@@ -52,15 +52,20 @@ app.get('/spec', (req, res) => {
 });
 
 setInterval(function() {
-    var cpu = osu.cpu
-
+    let cpu = osu.cpu;
+    let cpuCount = os.cpus().length;
+    let freemem = os.freemem();
+    let totmem = os.totalmem();
     cpu.usage()
         .then(info => {
             //console.log(info)
             io.emit('response usage', info.toString());
+            console.log(cpuCount);
+            console.log(totmem);
+            console.log(freemem);
         });
 
-}, 500);
+}, 1000);
 
 http.listen(port, () => {
     console.log(`Socket.IO server running at http://localhost:${port}/`);
