@@ -9,7 +9,7 @@ const port = 3000;
 
 app.get('/', (req, res) => {
 
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/templates/index.html');
 });
 
 io.on('connection', (socket) => {
@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
 
 app.get('/data', (req, res) => {
 
-    res.sendFile(__dirname + '/data.html');
+    res.sendFile(__dirname + '/templates/data.html');
 });
 
 app.get('/static/:filename', (req, res) => { //serving static files
