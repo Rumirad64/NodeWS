@@ -3,12 +3,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const os = require('os');
 var osu = require('node-os-utils');
-
-
 const { info } = require('console');
-
-
-
 
 const port = 3000;
 
@@ -32,7 +27,7 @@ io.on('connection', (socket) => {
     socket.on('request usage', msg => {
         console.log("Requesting Usage");
         var address = socket.handshake.address.substring(7);
-        io.emit('response usage', "10");
+        //io.emit('response usage', "10");
     });
 });
 
@@ -41,30 +36,35 @@ app.get('/data', (req, res) => {
     res.sendFile(__dirname + '/data.html');
 });
 
-app.get('/spec', (req, res) => {
-    var cpu = osu.cpu
+app.get('/static/:filename', (req, res) => { //serving static files
 
-    cpu.usage()
-        .then(info => {
-            console.log(info)
-        })
-    res.status(200).send("usage");
+    res.sendFile(__dirname + '/static/' + req.params.filename);
 });
 
 setInterval(function() {
     let cpu = osu.cpu;
     let cpuCount = os.cpus().length;
-    let freemem = os.freemem();
-    let totmem = os.totalmem();
-    cpu.usage()
-        .then(info => {
-            //console.log(info)
-            io.emit('response usage', info.toString());
-            console.log(cpuCount);
-            console.log(totmem);
-            console.log(freemem);
-        });
 
+    let totmem = os.totalmem();
+    totmem = totmem / 1.074 / Math.pow(10, 9);
+    totmem = totmem.toFixed(2);
+
+    let freemem = os.freemem();
+    let usedmem = totmem - freemem / 1.074 / Math.pow(10, 9);
+    usedmem = usedmem.toFixed(2);
+
+    cpu.usage()
+        .then(cpuusage => {
+            let response = {
+                "LogicalProcessors": cpuCount,
+                "CPUUsage": cpuusage,
+                "TotalMemory": totmem,
+                "UsedMemory": usedmem
+            };
+            io.emit('response usage', response);
+            console.log(response);
+
+        });
 }, 1000);
 
 http.listen(port, () => {

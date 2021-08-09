@@ -9,75 +9,27 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"></script>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 </head>
 
 <body>
-    <div width="400" height="400">
-        <canvas id="myChart"></canvas>
+    <div class="container ">
+        <h1>Amo amo mewwane CPU usage <span id="usage_percentage"></span> </h1>
+        <canvas id="cpuchart"></canvas>
     </div>
+    <br>
+    <div class="container ">
+        <h1>Amo amo mewwane RAM usage <span id="ram_percentage"></span> </h1>
+        <canvas id="ramchart"></canvas>
+    </div>
+
 </body>
-<script>
-    var time = new Date();
-    var currtime = (time.toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true
-    }));
-    var labels = [
-        currtime,
 
-
-    ];
-    var data = {
-        labels: labels,
-        datasets: [{
-            label: 'CPU Usage',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [100, ],
-        }]
-    };
-
-    var config = {
-        type: 'line',
-        data,
-        options: {}
-    };
-    var myChart = new Chart(
-        document.getElementById('myChart'),
-        config
-    );
-    /*
-    var intervalId = window.setInterval(function() {
-        console.log(data.datasets[0].data.push(Math.random() * (80 - 1) + 1));
-        let time = new Date();
-        let currtime = (time.toLocaleString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true
-        }));
-        labels.push(currtime);
-        myChart.update();
-    }, 2000); 
-    */
-
-    var socket = io();
-
-    socket.emit('request usage', "ping");
-
-    socket.on('response usage', function(msg) {
-        console.log("Received usage ->" + msg);
-        data.datasets[0].data.push(msg);
-        let time = new Date();
-        let currtime = (time.toLocaleString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true
-        }));
-        labels.push(currtime);
-        myChart.update();
-    });
-</script>
+<script src="/static/mycharts.js"></script>
 
 </html>
