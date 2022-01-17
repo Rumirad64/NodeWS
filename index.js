@@ -5,7 +5,7 @@ const os = require('os');
 var osu = require('node-os-utils');
 const { info } = require('console');
 
-const port = 3000;
+const port = 80;
 
 app.get('/', (req, res) => {
 
@@ -62,7 +62,7 @@ setInterval(function() {
                 "UsedMemory": usedmem
             };
             io.emit('response usage', response);
-            console.log(response);
+            //console.log(response);
 
         });
 }, 1000);
